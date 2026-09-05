@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "completed": {
+      "type": "boolean",
+      "description": "True only when the recipient clearly says the stated goal is complete."
+    },
+    "reason": {
+      "type": "string",
+      "description": "Why the goal is incomplete, in the recipient's own words when available."
+    },
+    "next_checkin_time": {
+      "type": "string",
+      "description": "When the recipient plans to continue, in their own words or ISO-8601 when explicit."
+    }
+  },
+  "required": ["completed"],
+  "additionalProperties": false
+}

@@ -1,0 +1,2 @@
+checkinId,requestedAt,finishedAt,maskedPhoneNumber,goal,region,language,timezone,callDisposition,structuredResult,providerRunId,providerResultFinalized
+"example-checkin-id","2026-09-01T09:00:00-04:00","2026-09-01T09:00:24-04:00","+1******1234","finish the thesis proposal","US","English","America/New_York","completed","{""completed"":true}","example-run-id",true
