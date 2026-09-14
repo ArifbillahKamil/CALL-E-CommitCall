@@ -124,6 +124,71 @@ Before a real call, the host must have:
 
 Never infer missing phone, country, region, language, or timezone values.
 
+## Getting Started (Codex)
+
+CommitCall is an Agent Skill, so installing this repository does not install
+CALL-E or place a call. The steps below use Windows PowerShell; other Agent
+Skills-compatible hosts can use the same `skills/commit-call` folder in their
+own skills directory.
+
+1. Install the skill in your personal Codex skills directory:
+
+   ```powershell
+   git clone https://github.com/ArifbillahKamil/CALL-E-CommitCall.git
+   Set-Location CALL-E-CommitCall
+   New-Item -ItemType Directory -Force "$HOME\.agents\skills" | Out-Null
+   Copy-Item -LiteralPath ".\skills\commit-call" -Destination "$HOME\.agents\skills\commit-call" -Recurse
+   ```
+
+   These copy steps assume `commit-call` is not already installed. Codex also
+   supports repository-scoped skills under `.agents/skills`. See the
+   [Codex skills documentation](https://learn.chatgpt.com/docs/build-skills)
+   for other installation locations. Restart Codex if the skill does not appear.
+
+2. Connect CALL-E as an authenticated MCP server in the Codex host:
+
+   ```powershell
+   codex mcp add calle --url https://seleven-mcp-sg.airudder.com/mcp/openagent_oauth
+   codex mcp login calle
+   codex mcp list
+   ```
+
+   Complete the browser authorization prompted by `codex mcp login`. In a new
+   Codex conversation, ask Codex to verify that `plan_call`, `run_call`, and
+   `get_call_run` are available before requesting a call. Listing the server
+   configuration alone does not verify its tools. See the
+   [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+   and the [official CALL-E installation guide](https://open.heycall-e.com/document/mcp-archive/CALL-E-installation-guide.md)
+   if setup or authorization needs attention.
+
+   The optional `$calle:calle` Codex plugin checks CALL-E through its own CLI
+   integration. A successful plugin check does not automatically expose MCP
+   tools to CommitCall; verify the host connection above separately. If the
+   plugin reports an outdated CLI, follow its bundled entry-point instructions
+   to select a current official `@call-e/cli` installation. The CLI requires
+   Node.js 22 or newer.
+
+3. Ask for one check-in, supplying every required value. Replace every
+   placeholder with your own details, and use a region/language combination
+   from CALL-E's [supported matrix](https://github.com/CALLE-AI/call-e-integrations#supported-regions-and-languages):
+
+   ```text
+   $commit-call Call me once on my own number <YOUR_E164_NUMBER> to check
+   whether I finished <MY_GOAL>. Use region <SUPPORTED_REGION>, language
+   <SUPPORTED_LANGUAGE>, timezone <IANA_TIMEZONE>, and save the result to
+   ./results/commit-call.csv. Show me the masked preview before calling.
+   ```
+
+4. Review the masked destination, goal, and CSV path. The agent checks for a
+   duplicate request and inspects the provider plan, then asks for explicit
+   approval of that exact call. After approval, it makes at most one call,
+   waits for a terminal result, reconciles the outcome, and writes one record
+   to the approved CSV. Inspect `results/example.csv` for a fictional output
+   example. Runtime CSV files are excluded from Git by `.gitignore`.
+
+Setup checks, tool discovery, and the preview do not place a call. Do not put
+your real phone number, a transcript, or credentials into a commit or issue.
+
 ## Example Request
 
 All repository examples use fictional data. The following number is reserved
